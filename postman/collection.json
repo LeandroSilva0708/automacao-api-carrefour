@@ -8,7 +8,7 @@
   },
   "item": [
     {
-      "name": "{{url_base}}/usuarios",
+      "name": "Criar Usuário",
       "event": [
         {
           "listen": "test",
@@ -49,7 +49,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"nome\": \"{{$randomFullName}}\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"password\": \"senha_segura123\",\r\n  \"administrador\": \"true\"\r\n}",
+          "raw": "{\r\n  \"nome\": \"{{$randomFullName}}\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"password\": \"senha_segura123\",\r\n  \"administrador\": \"true\"\r\n}\r\n",
           "options": {
             "raw": {
               "language": "json"
@@ -69,7 +69,7 @@
       "response": []
     },
     {
-      "name": "{{url_base}}/usuarios",
+      "name": "Login",
       "event": [
         {
           "listen": "test",
@@ -105,7 +105,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"nome\": \"{{$randomFullName}}\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"password\": \"senha_segura123\",\r\n  \"administrador\": \"true\"\r\n}",
+          "raw": "{\r\n  \"email\": \"{{email_criado}}\",\r\n  \"password\": \"{{senha_criada}}\"\r\n}\r\n",
           "options": {
             "raw": {
               "language": "json"
@@ -113,19 +113,19 @@
           }
         },
         "url": {
-          "raw": "{{url_base}}/usuarios",
+          "raw": "{{url_base}}/login",
           "host": [
             "{{url_base}}"
           ],
           "path": [
-            "usuarios"
+            "login"
           ]
         }
       },
       "response": []
     },
     {
-      "name": "{{url_base}}/usuarios/{{id_usuario}}",
+      "name": "Buscar por ID",
       "event": [
         {
           "listen": "test",
@@ -174,7 +174,7 @@
       "response": []
     },
     {
-      "name": "{{url_base}}/usuarios/{{id_usuario}}",
+      "name": "Atualizar",
       "event": [
         {
           "listen": "test",
@@ -231,7 +231,7 @@
       "response": []
     },
     {
-      "name": "{{url_base}}/usuarios",
+      "name": "Listar Todos",
       "event": [
         {
           "listen": "test",
@@ -244,7 +244,8 @@
               "pm.test(\"CT05: Retorna um lista de usuários válido\", function () {\r",
               "    var resposta = pm.response.json();\r",
               "    pm.expect(resposta.usuarios).to.be.an('array');\r",
-              "});"
+              "});\r",
+              ""
             ],
             "type": "text/javascript",
             "packages": {},
@@ -268,7 +269,7 @@
       "response": []
     },
     {
-      "name": "{{url_base}}/usuarios/{{id_usuario}}",
+      "name": "Excluir",
       "event": [
         {
           "listen": "test",
