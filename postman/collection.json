@@ -14,18 +14,19 @@
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Status code é 200 OK\", function () {\r",
+              "pm.test(\"CT01: Status code é 201 Created\", function () {\r",
               "    pm.response.to.have.status(201);\r",
               "});\r",
               "\r",
-              "pm.test(\"Login com sucesso e Token salvo\", function () {\r",
+              "// Salva os dados para automatizar o resto do fluxo!\r",
+              "if(pm.response.code === 201) {\r",
               "    var resposta = pm.response.json();\r",
-              "    pm.expect(resposta.message).to.eql(\"Login realizado com sucesso\");\r",
-              "\r",
-              "\r",
-              "    pm.environment.set(\"token\", resposta.authorization.replace(\"Bearer \", \"\"));\r",
-              "});\r",
-              ""
+              "    pm.environment.set(\"id_usuario\", resposta._id);\r",
+              "    \r",
+              "    var requestBody = JSON.parse(pm.request.body.raw);\r",
+              "    pm.environment.set(\"email_criado\", requestBody.email);\r",
+              "    pm.environment.set(\"senha_criada\", requestBody.password);\r",
+              "}"
             ],
             "type": "text/javascript",
             "packages": {},
@@ -48,7 +49,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"nome\": \"Leandro QA\",\r\n  \"email\": \"leandro_test_vaga@qa.com.br\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+          "raw": "{\r\n  \"nome\": \"{{$randomFullName}}\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"password\": \"senha_segura123\",\r\n  \"administrador\": \"true\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -56,11 +57,9 @@
           }
         },
         "url": {
-          "raw": "https://serverest.dev/usuarios",
-          "protocol": "https",
+          "raw": "{{url_base}}/usuarios",
           "host": [
-            "serverest",
-            "dev"
+            "{{url_base}}"
           ],
           "path": [
             "usuarios"
@@ -76,14 +75,13 @@
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Status code é 200 OK\", function () {\r",
+              "pm.test(\"CT02: Status code é 200 OK\", function () {\r",
               "    pm.response.to.have.status(200);\r",
               "});\r",
               "\r",
-              "pm.test(\"Retornou o usuário correto\", function () {\r",
+              "pm.test(\"CT02: Salva Token JWT no cofre\", function () {\r",
               "    var resposta = pm.response.json();\r",
-              "    pm.expect(resposta._id).to.eql(pm.environment.get(\"id_usuario\"));\r",
-              "    pm.expect(resposta.email).to.eql(pm.environment.get(\"email_criado\"));\r",
+              "    pm.environment.set(\"token\", resposta.authorization.replace(\"Bearer \", \"\"));\r",
               "});"
             ],
             "type": "text/javascript",
@@ -107,7 +105,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"email\": \"{{email_criado}}\",\r\n  \"password\": \"{{senha_criada}}\"\r\n}\r\n",
+          "raw": "{\r\n  \"nome\": \"{{$randomFullName}}\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"password\": \"senha_segura123\",\r\n  \"administrador\": \"true\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -128,9 +126,50 @@
     },
     {
       "name": "{{url_base}}/usuarios/{{id_usuario}}",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"CT03: Status code é 200 OK\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"CT03: Valida integridade dos dados (ID e Email)\", function () {\r",
+              "    var resposta = pm.response.json();\r",
+              "    pm.expect(resposta._id).to.eql(pm.environment.get(\"id_usuario\"));\r",
+              "    pm.expect(resposta.email).to.eql(pm.environment.get(\"email_criado\"));\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
         "method": "GET",
-        "header": []
+        "header": [],
+        "url": {
+          "raw": "{{url_base}}/usuarios/{{id_usuario}}",
+          "host": [
+            "{{url_base}}"
+          ],
+          "path": [
+            "usuarios",
+            "{{id_usuario}}"
+          ]
+        }
       },
       "response": []
     },
@@ -192,15 +231,44 @@
       "response": []
     },
     {
-      "name": "New Request",
+      "name": "{{url_base}}/usuarios",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"CT05: Status code é 200 OK\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"CT05: Retorna um lista de usuários válido\", function () {\r",
+              "    var resposta = pm.response.json();\r",
+              "    pm.expect(resposta.usuarios).to.be.an('array');\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
       "request": {
         "method": "GET",
-        "header": []
+        "header": [],
+        "url": {
+          "raw": "{{url_base}}/usuarios",
+          "host": [
+            "{{url_base}}"
+          ],
+          "path": [
+            "usuarios"
+          ]
+        }
       },
       "response": []
     },
     {
-      "name": "New Request",
+      "name": "{{url_base}}/usuarios/{{id_usuario}}",
       "event": [
         {
           "listen": "test",
