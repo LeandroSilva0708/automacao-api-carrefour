@@ -1,0 +1,22 @@
+{
+	"id": "fb97c42e-fb86-483c-94a8-78fd52c6b3f6",
+	"name": "Carrefour_Environment",
+	"values": [
+		{
+			"key": "url_base",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		}
+	],
+	"color": null,
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2026-04-08T18:45:18.682Z",
+	"_postman_exported_using": "Postman/11.82.6"
+}

@@ -1,0 +1,291 @@
+{
+  "info": {
+    "_postman_id": "a044492c-8a66-4550-9791-0fb2a16df64f",
+    "name": "API Carrefour - ServeRest",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "11592768",
+    "_collection_link": "https://go.postman.co/collection/11592768-a044492c-8a66-4550-9791-0fb2a16df64f?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "{{url_base}}/usuarios",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code é 200 OK\", function () {\r",
+              "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Login com sucesso e Token salvo\", function () {\r",
+              "    var resposta = pm.response.json();\r",
+              "    pm.expect(resposta.message).to.eql(\"Login realizado com sucesso\");\r",
+              "\r",
+              "\r",
+              "    pm.environment.set(\"token\", resposta.authorization.replace(\"Bearer \", \"\"));\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nome\": \"Leandro QA\",\r\n  \"email\": \"leandro_test_vaga@qa.com.br\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://serverest.dev/usuarios",
+          "protocol": "https",
+          "host": [
+            "serverest",
+            "dev"
+          ],
+          "path": [
+            "usuarios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "{{url_base}}/usuarios",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code é 200 OK\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Retornou o usuário correto\", function () {\r",
+              "    var resposta = pm.response.json();\r",
+              "    pm.expect(resposta._id).to.eql(pm.environment.get(\"id_usuario\"));\r",
+              "    pm.expect(resposta.email).to.eql(pm.environment.get(\"email_criado\"));\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"{{email_criado}}\",\r\n  \"password\": \"{{senha_criada}}\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url_base}}/usuarios",
+          "host": [
+            "{{url_base}}"
+          ],
+          "path": [
+            "usuarios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "{{url_base}}/usuarios/{{id_usuario}}",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "{{url_base}}/usuarios/{{id_usuario}}",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"CT04: Status code é 200 OK\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"CT04: Valida mensagem de sucesso da edição\", function () {\r",
+              "    var resposta = pm.response.json();\r",
+              "    pm.expect(resposta.message).to.eql(\"Registro alterado com sucesso\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nome\": \"QA Sênior - Leandro Silva\",\r\n  \"email\": \"{{email_criado}}\",\r\n  \"password\": \"{{senha_criada}}\",\r\n  \"administrador\": \"true\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url_base}}/usuarios/{{id_usuario}}",
+          "host": [
+            "{{url_base}}"
+          ],
+          "path": [
+            "usuarios",
+            "{{id_usuario}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code é 200 OK\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Valida exclusão e limpa ambiente\", function () {\r",
+              "    var resposta = pm.response.json();\r",
+              "    pm.expect(resposta.message).to.eql(\"Registro excluído com sucesso\");\r",
+              "    \r",
+              "    // Faxina: Apaga as variáveis para não sujar a próxima execução\r",
+              "    pm.environment.unset(\"id_usuario\");\r",
+              "    pm.environment.unset(\"email_criado\");\r",
+              "    pm.environment.unset(\"senha_criada\");\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{url_base}}/usuarios/{{id_usuario}}",
+          "host": [
+            "{{url_base}}"
+          ],
+          "path": [
+            "usuarios",
+            "{{id_usuario}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
