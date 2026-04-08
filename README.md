@@ -53,3 +53,19 @@ Via Linha de Comando (Newman CLI)
 2. Instale o Newman e o gerador de relatórios globalmente:
    ```bash
    npm install -g newman newman-reporter-htmlextra
+   newman run ./postman/collection.json -e ./postman/environment.json --delay-request 500 -r htmlextra,cli
+
+Como eu executei o Teste:
+Para garantir a integração contínua do projeto, eu configurei uma pipeline automatizada utilizando o GitHub Actions.
+
+Estruturei a automação para que, sempre que um novo código for enviado para a branch main, a pipeline realize automaticamente as seguintes etapas:
+
+1-Prepara o ambiente instalando o Node.js e as dependências do Newman.
+2-Executa a coleção de testes que desenvolvi, respeitando rigorosamente o Rate Limit exigido.
+3-Gera o relatório visual de execução.
+4-Disponibiliza o relatório em formato .html como um Artefato da pipeline. 
+Configurei essa etapa para salvar a evidência independentemente de os testes passarem ou falharem, garantindo a rastreabilidade em qualquer cenário.
+5-Acesse a aba Actions aqui do repositório.
+6-Clique na execução mais recente (marcada com o check verde).
+7-Role até o final da página e baixe o arquivo comprimido na seção Artifacts.
+8-Extraia o arquivo e abra o documento HTML no seu navegador web padrão para visualizar o dashboard com os resultados detalhados.
